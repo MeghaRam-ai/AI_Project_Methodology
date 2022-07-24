@@ -1,6 +1,7 @@
 from sklearn.preprocessing import OrdinalEncoder, StandardScaler
 import joblib
 import pandas as pd
+from typing import List
 
 
 def transform_to_time_distance(data: pd.DataFrame) -> pd.DataFrame:
@@ -41,7 +42,7 @@ def encode_categorical(data: pd.DataFrame,
     return data
 
 
-def fill_missing_continuous(data: pd.DataFrame, columns: list[str],
+def fill_missing_continuous(data: pd.DataFrame, columns: List[str],
                             is_train_data: bool) -> pd.DataFrame:
     if is_train_data:
         medians = data[columns].median()
