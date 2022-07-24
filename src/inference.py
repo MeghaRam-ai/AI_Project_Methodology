@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 import joblib
+import sys
+sys.path.append(os.path.abspath('../'))
 from src.preprocess import drop_unrelevent_features
 
 
