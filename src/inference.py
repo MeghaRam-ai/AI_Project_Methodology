@@ -9,12 +9,7 @@ from mlflow.tracking import MlflowClient
 from dotenv import load_dotenv
 
 
-def make_predictions(input_data: pd.DataFrame) -> np.ndarray:
-    """
-    Make predictions on best performing model
-    """
-    input_data = get_preprocessed_data(input_data, is_train_data=False)
-
+def get_best_model():
     if os.getenv('ROOT') is None:
         load_dotenv()
 
@@ -40,6 +35,13 @@ def make_predictions(input_data: pd.DataFrame) -> np.ndarray:
     best_model_path = client.download_artifacts(best_run_id,
                                                 'random forest regressor')
     print('using model:', best_model_path, 'with id:', best_run_id)
-    best_model = mlflow.sklearn.load_model(best_model_path)
+    return mlflow.sklearn.load_model(best_model_path)
 
-    return best_model.predict(input_data)
+
+def make_predictions(input_data: pd.DataFrame) -> np.ndarray:
+    """
+    Make predictions on best performing model
+    """
+    input_data = get_preprocessed_data(input_data, is_train_data=False)
+
+    return get_best_model().predict(input_data)
