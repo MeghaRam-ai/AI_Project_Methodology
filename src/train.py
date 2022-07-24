@@ -1,71 +1,40 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
+from .preprocess import get_preprocessed_data
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_log_error
-from src.preprocess import drop_unrelevent_features
-from src.preprocess import ordinal_encode_features
-from src.preprocess import one_hot_encode_features
-from src.preprocess import scaling_features
-from src.preprocess import save_encoder
-from src.preprocess import load_encoder
+import os
+import joblib
+from dotenv import load_dotenv
 
 
-def split_dataset(df: pd.DataFrame) -> np.ndarray:
-    y = df['SalePrice']
-    X = df.drop(['SalePrice'], axis=1)
-    X_train, X_test, y_train, y_test = train_test_split(X,
-                                                        y,
-                                                        test_size=0.33,
-                                                        random_state=42)
-    return X_train, X_test, y_train, y_test
-
-
-def model_training(X_train: np.ndarray,
-                   y_train: np.ndarray) -> RandomForestRegressor:
-    random_forest_regressor_model = RandomForestRegressor(max_depth=2,
-                                                          random_state=0)
-    random_forest_regressor_model.fit(X_train, y_train)
-    save_encoder(random_forest_regressor_model,
-                 'random_forest_regressor_model')
-    return random_forest_regressor_model
-
-
-def model_evaluation(model: RandomForestRegressor,
-                     X_test: np.ndarray,
-                     y_test: np.ndarray) -> np.float64:
-    random_forest_regressor_model = load_encoder(
-        "random_forest_regressor_model"
-    )
-    prediction = random_forest_regressor_model.predict(X_test)
-    rmsle = compute_rmsle(y_test, prediction)
-    return rmsle
-
-
-def compute_rmsle(y_test: np.ndarray,
-                  y_pred: np.ndarray,
+def compute_rmsle(y_test: np.ndarray, y_pred: np.ndarray,
                   precision: int = 2) -> float:
     rmsle = np.sqrt(mean_squared_log_error(y_test, y_pred))
     return round(rmsle, precision)
 
 
-def build_model(df: pd.DataFrame) -> dict[str, str]:
-    # Returns a dictionary with the model performances
-    # (for example {'rmse': 0.18})
-    
+def evaluate(model: RandomForestRegressor, x_test: np.ndarray,
+             y_test: np.ndarray) -> float:
+    y_pred = model.predict(x_test)
+    return compute_rmsle(np.array(y_test), np.array(y_pred), 3)
 
-        
-    X_train, X_test, y_train, y_test = split_dataset(df)
-    X_train = drop_unrelevent_features(X_train)
-    X_test = drop_unrelevent_features(X_test)
-    X_train = ordinal_encode_features(X_train)
-    X_test = ordinal_encode_features(X_test)
-    X_train = one_hot_encode_features(X_train)
-    X_test = one_hot_encode_features(X_test)
-    X_train = scaling_features(X_train)
-    X_test = scaling_features(X_test)
-    ml_model = model_training(X_train, y_train)
-    rmsle = model_evaluation(ml_model, X_test, y_test)
-    return {'rmsle': rmsle}
 
-#%%
+def build_model(data: pd.DataFrame) -> dict[str, str]:
+    y = data['SalePrice']
+    x = data.drop(columns=['SalePrice'])
+
+    train, test, y_train, y_test = train_test_split(x, y, random_state=0)
+
+    train = get_preprocessed_data(train, is_train_data=True)
+    test = get_preprocessed_data(test, is_train_data=False)
+
+    rf = RandomForestRegressor(n_estimators=40, random_state=0)
+    rf.fit(train, y_train)
+
+    path = '../models/model.joblib'
+    joblib.dump(rf, path)
+
+    error = evaluate(rf, test, y_test)
+    return {'rmsle': str(error), 'model_path': os.path.abspath(path)}
