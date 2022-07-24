@@ -3,7 +3,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from typing import Dict
 import mlflow
-from .preprocess import get_preprocessed_data
+from src.preprocess import get_preprocessed_data
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_squared_log_error
 import os
@@ -12,13 +12,13 @@ import sklearn.metrics as metrics
 
 
 def compute_rmsle(y_test: np.ndarray, y_pred: np.ndarray,
-                  precision: int = 2) -> float:
+                precision: int = 2) -> float:
     rmsle = np.sqrt(mean_squared_log_error(y_test, y_pred))
     return round(rmsle, precision)
 
 
 def evaluate_rmsle(model: RandomForestRegressor, x_test: pd.DataFrame,
-                   y_test: np.ndarray) -> float:
+                y_test: np.ndarray) -> float:
     y_pred = model.predict(x_test)
     return compute_rmsle(np.array(y_test), np.array(y_pred), 3)
 
@@ -36,7 +36,7 @@ def build_model(data: pd.DataFrame, run_name: str) -> Dict[str, str]:
     experiment = mlflow.get_experiment_by_name(experiment_name)
 
     with mlflow.start_run(experiment_id=experiment.experiment_id,
-                          run_name=f"run_{run_name}"):
+                        run_name=f"run_{run_name}"):
         rand_state = np.random.randint(1, 100)
 
         y = data['SalePrice']

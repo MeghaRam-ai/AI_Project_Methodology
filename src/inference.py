@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
-from .preprocess import get_preprocessed_data
+import sys
+import os
+sys.path.append(os.path.abspath('..'))
+from src.preprocess import get_preprocessed_data
 import joblib
 
 

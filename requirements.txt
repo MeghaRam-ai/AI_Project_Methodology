@@ -9,3 +9,6 @@ jupyter==1.0.0
 mlflow==1.26.1
 scikit_learn==1.0
 python-dotenv==0.19.2
+Sphinx==5.0.2
+sphinx-rtd-theme==1.0.0
+shap==0.39.0 
