@@ -1,0 +1,15 @@
+artifact_uri: /Users/mateusz/Documents/EPITA/AIProjMethodology/AI_Project_Methodology/models/mlruns/1/9f07b9d456a0497fb00c6fa6c9ccfd02/artifacts
+end_time: 1658678567381
+entry_point_name: ''
+experiment_id: '1'
+lifecycle_stage: active
+name: ''
+run_id: 9f07b9d456a0497fb00c6fa6c9ccfd02
+run_uuid: 9f07b9d456a0497fb00c6fa6c9ccfd02
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1658678562960
+status: 3
+tags: []
+user_id: mateusz

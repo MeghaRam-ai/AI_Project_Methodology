@@ -1,0 +1,4 @@
+artifact_location: /Users/mateusz/Documents/EPITA/AIProjMethodology/AI_Project_Methodology/models/mlruns/1
+experiment_id: '1'
+lifecycle_stage: active
+name: House prices prediction
