@@ -77,6 +77,24 @@ Predictions of test set can be found in the notebook. Also there we can find exa
     ```
     
     
-    
-    
+# Visualisation of model decision using SHAP
+
+It is a tool to interpret machine learning model using visualisation.
+
+### Steps
+
+1. install SHAP using 
+
+  ```bash 
+        pip install shap
+     or
+        conda install -c conda-forge shap
+   ```
+   
+2. In our application we are using 'RandomForestRegressor' model for the prediction. 
+   The suitable method in SHAP to explain this model is 'TreeExplainer'.
+   We give the model as input to the SHAP TreeExplainer. 
+   
+   The results we obtained is stored under reports directory
+   
     
