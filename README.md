@@ -17,3 +17,8 @@ As project wasn't very broad and team consisted of only 2 people, we decided to 
 Data preparation, integration of SHAP library into project, generation of sphinx documentation.
 ### Mateusz
 Feature engineering, model training, model inference and mlflow integration.
+
+# Model
+We trained Random Forest Classifier model to predict house price. The output of the model is float value - estimated number of dollars the property is worth.
+# Inference
+Predictions of test set can be found in the notebook. Also there we can find examples of the usage of our model.
